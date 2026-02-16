@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Blackjack.Core/Blackjack.Core.csproj" />
+  <Project Path="Blackjack.Data/Blackjack.Data.csproj" />
+  <Project Path="Blackjack.WPF/Blackjack.WPF.csproj" />
+</Solution>
