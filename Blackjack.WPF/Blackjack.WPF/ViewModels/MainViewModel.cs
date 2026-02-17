@@ -5,11 +5,11 @@ namespace Blackjack.WPF.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private BaseViewModel _currentViewModel;
+        private BaseViewModel? _currentViewModel;
 
         public BaseViewModel CurrentViewModel
         {
-            get => _currentViewModel;
+            get => _currentViewModel!;
             set => SetProperty(ref _currentViewModel, value);
         }
 
