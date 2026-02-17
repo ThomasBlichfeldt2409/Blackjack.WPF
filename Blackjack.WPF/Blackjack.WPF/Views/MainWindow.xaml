@@ -5,9 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Blackjack.WPF"
         xmlns:views="clr-namespace:Blackjack.WPF.Views"
+        xmlns:vm="clr-namespace:Blackjack.WPF.ViewModels"
         mc:Ignorable="d"
         Title="Blackjack" Height="550" Width="900">
 
+    <Window.DataContext>
+        <vm:MainViewModel></vm:MainViewModel>
+    </Window.DataContext>
+    
     <Window.Background>
         <ImageBrush ImageSource="/Assets/background.jpg"/>
     </Window.Background>
@@ -19,6 +24,10 @@
         </Grid.ColumnDefinitions>
 
         <views:NavigationPanel Grid.Column="0"></views:NavigationPanel>
+
+        <ContentControl Grid.Column="1"
+                        Content="{Binding CurrentViewModel}">
+        </ContentControl>
     </Grid>
 
 </Window>

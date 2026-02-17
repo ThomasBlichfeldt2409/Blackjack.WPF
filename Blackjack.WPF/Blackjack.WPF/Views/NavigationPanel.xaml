@@ -4,6 +4,7 @@
              x:Name="Root">
 
     <Grid>
+        <!-- Navigation Panel -->
         <Border>
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -22,6 +23,40 @@
                 </LinearGradientBrush>
             </Border.Background>
         </Border>
+
+        <StackPanel>
+            <!-- Header -->
+            <TextBlock Text="Blackjack"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       HorizontalAlignment="Center"
+                       Margin="0,10,0,0">
+            </TextBlock>
+
+            <Rectangle Height="1"
+                       Fill="#55FFFFFF"
+                       Margin="5,5,5,0">
+            </Rectangle>
+            
+            <!-- Home Button -->
+            <Button Content="Home"
+                    Height="30"
+                    Margin="10,15,10,0"
+                    FontSize="14"
+                    FontWeight="Bold">
+            </Button>
+
+            <!-- Game Button -->
+            <Button Content="Game"
+                    Height="30"
+                    Margin="10,15,10,0"
+                    FontSize="14"
+                    FontWeight="Bold">
+            </Button>
+
+        </StackPanel>
+        
     </Grid>
 
 </UserControl>
