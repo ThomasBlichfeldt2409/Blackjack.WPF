@@ -1,5 +1,6 @@
-﻿using System.Windows.Input;
-using Blackjack.WPF.Commands;
+﻿using Blackjack.WPF.Commands;
+using Blackjack.WPF.Views;
+using System.Windows.Input;
 
 namespace Blackjack.WPF.ViewModels
 {
@@ -10,8 +11,21 @@ namespace Blackjack.WPF.ViewModels
         public BaseViewModel CurrentViewModel
         {
             get => _currentViewModel!;
-            set => SetProperty(ref _currentViewModel, value);
+            set
+            { 
+                if (SetProperty(ref _currentViewModel, value))
+                {
+                    OnPropertyChanged(nameof(IsHomeView));
+                    OnPropertyChanged(nameof(IsGameView));
+                }
+            }
         }
+
+        public bool IsHomeView =>
+            CurrentViewModel is HomeViewModel;
+
+        public bool IsGameView =>
+            CurrentViewModel is GameViewModel;
 
         public ICommand NavigateHomeCommand { get; }
         public ICommand NavigateGameCommand { get; }
