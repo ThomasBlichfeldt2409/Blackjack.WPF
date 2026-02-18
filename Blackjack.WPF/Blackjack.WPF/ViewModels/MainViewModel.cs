@@ -1,5 +1,4 @@
 ﻿using Blackjack.WPF.Commands;
-using Blackjack.WPF.Views;
 using System.Windows.Input;
 
 namespace Blackjack.WPF.ViewModels
@@ -7,6 +6,8 @@ namespace Blackjack.WPF.ViewModels
     public class MainViewModel : BaseViewModel
     {
         private BaseViewModel? _currentViewModel;
+        private readonly HomeViewModel _homeVM = new HomeViewModel();
+        private readonly GameViewModel _gameVM = new GameViewModel();
 
         public BaseViewModel CurrentViewModel
         {
@@ -40,12 +41,12 @@ namespace Blackjack.WPF.ViewModels
 
         private void NavigateHome()
         {
-            CurrentViewModel = new HomeViewModel();
+            CurrentViewModel = _homeVM;
         }
 
         private void NavigateGame()
         {
-            CurrentViewModel = new GameViewModel();
+            CurrentViewModel = _gameVM;
         }
     }
 }
