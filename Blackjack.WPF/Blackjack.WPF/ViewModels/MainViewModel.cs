@@ -20,6 +20,8 @@ namespace Blackjack.WPF.ViewModels
         {
             NavigateHomeCommand = new RelayCommand(_ => NavigateHome());
             NavigateGameCommand = new RelayCommand(_ => NavigateGame());
+
+            NavigateHome();
         }
 
         private void NavigateHome()

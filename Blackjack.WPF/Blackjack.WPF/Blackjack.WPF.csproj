@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Navigation\**" />
+    <EmbeddedResource Remove="Navigation\**" />
+    <None Remove="Navigation\**" />
+    <Page Remove="Navigation\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Assets\background.jpg" />
     <None Remove="Assets\Cards\back_dark.png" />
     <None Remove="Assets\Cards\back_light.png" />
@@ -82,7 +89,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Navigation\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

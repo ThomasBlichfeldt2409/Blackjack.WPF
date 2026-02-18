@@ -41,6 +41,7 @@
             
             <!-- Home Button -->
             <Button Content="Home"
+                    Command="{Binding NavigateHomeCommand}"
                     Height="30"
                     Margin="10,15,10,0"
                     FontSize="14"
@@ -49,6 +50,7 @@
 
             <!-- Game Button -->
             <Button Content="Game"
+                    Command="{Binding NavigateGameCommand}"
                     Height="30"
                     Margin="10,15,10,0"
                     FontSize="14"
