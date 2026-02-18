@@ -1,13 +1,16 @@
-﻿using Blackjack.WPF.Commands;
+﻿using Blackjack.Data;
+using Blackjack.WPF.Commands;
 using System.Windows.Input;
 
 namespace Blackjack.WPF.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
+        private readonly PlayerRepository _repository;
+
         private BaseViewModel? _currentViewModel;
-        private readonly HomeViewModel _homeVM = new HomeViewModel();
-        private readonly GameViewModel _gameVM = new GameViewModel();
+        private readonly HomeViewModel _homeVM;
+        private readonly GameViewModel _gameVM;
 
         public BaseViewModel CurrentViewModel
         {
@@ -33,6 +36,11 @@ namespace Blackjack.WPF.ViewModels
 
         public MainViewModel()
         {
+            _repository = new PlayerRepository(App.DbPath);
+
+            _homeVM = new HomeViewModel(_repository);
+            _gameVM = new GameViewModel(_repository);
+
             NavigateHomeCommand = new RelayCommand(_ => NavigateHome());
             NavigateGameCommand = new RelayCommand(_ => NavigateGame());
 
