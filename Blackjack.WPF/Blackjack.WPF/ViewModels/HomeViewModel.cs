@@ -1,6 +1,7 @@
 ﻿using Blackjack.Core;
 using Blackjack.Data;
 using Blackjack.WPF.Commands;
+using Blackjack.WPF.Views;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -28,16 +29,20 @@ namespace Blackjack.WPF.ViewModels
         }
 
         public ICommand RemoveTablePlayerCommand { get; }
+        public ICommand OpenCreatePlayerCommand { get; }
 
         public HomeViewModel(PlayerRepository repository, ObservableCollection<Player> tablePlayers)
         {
             _repository = repository;
             TablePlayers = tablePlayers;
 
+            // Commands  
             RemoveTablePlayerCommand = new RelayCommand(
                 _ => RemoveTablePlayer(), 
                 _ => SelectedTablePlayer != null
             );
+
+            OpenCreatePlayerCommand = new RelayCommand(_ => OpenCreatePlayer());
         }
 
         private void RemoveTablePlayer()
@@ -46,6 +51,22 @@ namespace Blackjack.WPF.ViewModels
                 return;
 
             TablePlayers.Remove(SelectedTablePlayer);
+        }
+
+        private void OpenCreatePlayer()
+        {
+            CreatePlayerViewModel vm = new CreatePlayerViewModel();
+
+            CreatePlayerWindow window = new CreatePlayerWindow
+            {
+                Owner = App.Current.MainWindow,
+                DataContext = vm
+            };
+
+            if (window.ShowDialog() == true)
+            {
+                AllPlayers.Add(vm.CreatedPlayer!);
+            }
         }
 
         public async Task LoadPlayersAsync()

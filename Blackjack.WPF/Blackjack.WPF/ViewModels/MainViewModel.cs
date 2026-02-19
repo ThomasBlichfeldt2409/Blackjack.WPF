@@ -49,11 +49,6 @@ namespace Blackjack.WPF.ViewModels
             NavigateGameCommand = new RelayCommand(_ => NavigateGame());
 
             NavigateHome();
-
-            TablePlayers.Add(new Player { Name = "Thomas", Bank = 1000 });
-            TablePlayers.Add(new Player { Name = "Holger", Bank = 3200 });
-            TablePlayers.Add(new Player { Name = "Carl", Bank = 1600 });
-            TablePlayers.Add(new Player { Name = "Lakrids", Bank = 200 });
         }
 
         private void NavigateHome()
