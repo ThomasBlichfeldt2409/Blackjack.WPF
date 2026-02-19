@@ -1,6 +1,7 @@
 ﻿using Blackjack.WPF.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,11 +23,19 @@ namespace Blackjack.WPF.Views
         public HomeView()
         {
             InitializeComponent();
+
+            // Loaded fires every time the view is reloaded.
+            // So navigating back and forward between GameView and HomeView,
+            // will trigger HomeView_Loaded.
             Loaded += HomeView_Loaded;
         }
 
         private async void HomeView_Loaded(object sender, RoutedEventArgs e)
         {
+            // Prevents errors in Design Mode
+            if (DesignerProperties.GetIsInDesignMode(this))
+                return;
+
             if (DataContext is HomeViewModel vm)
                 await vm.LoadPlayersAsync();
         }

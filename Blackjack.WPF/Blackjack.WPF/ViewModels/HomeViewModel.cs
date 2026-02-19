@@ -7,6 +7,7 @@ namespace Blackjack.WPF.ViewModels
     public class HomeViewModel : BaseViewModel
     {
         private readonly PlayerRepository _repository;
+        private bool _isLoaded;
 
         public ObservableCollection<Player> AllPlayers { get; } = new();
         public ObservableCollection<Player> TablePlayers { get; }
@@ -19,6 +20,9 @@ namespace Blackjack.WPF.ViewModels
 
         public async Task LoadPlayersAsync()
         {
+            if (_isLoaded)
+                return;
+
             List<Player> players = await _repository.GetAllAsync();
 
             AllPlayers.Clear();
@@ -26,6 +30,8 @@ namespace Blackjack.WPF.ViewModels
             {
                 AllPlayers.Add(player);
             }
+
+            _isLoaded = true;
         }
     }
 }
