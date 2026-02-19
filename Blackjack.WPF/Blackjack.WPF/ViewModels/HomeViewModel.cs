@@ -1,4 +1,6 @@
-﻿using Blackjack.Data;
+﻿using Blackjack.Core;
+using Blackjack.Data;
+using System.Collections.ObjectModel;
 
 namespace Blackjack.WPF.ViewModels
 {
@@ -6,9 +8,24 @@ namespace Blackjack.WPF.ViewModels
     {
         private readonly PlayerRepository _repository;
 
-        public HomeViewModel(PlayerRepository repository)
+        public ObservableCollection<Player> AllPlayers { get; } = new();
+        public ObservableCollection<Player> TablePlayers { get; }
+
+        public HomeViewModel(PlayerRepository repository, ObservableCollection<Player> tablePlayers)
         {
             _repository = repository;
+            TablePlayers = tablePlayers;
+        }
+
+        public async Task LoadPlayersAsync()
+        {
+            List<Player> players = await _repository.GetAllAsync();
+
+            AllPlayers.Clear();
+            foreach (Player player in players)
+            {
+                AllPlayers.Add(player);
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Blackjack.WPF.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -21,6 +22,13 @@ namespace Blackjack.WPF.Views
         public HomeView()
         {
             InitializeComponent();
+            Loaded += HomeView_Loaded;
+        }
+
+        private async void HomeView_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is HomeViewModel vm)
+                await vm.LoadPlayersAsync();
         }
     }
 }

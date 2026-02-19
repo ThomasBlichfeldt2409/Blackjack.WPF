@@ -1,5 +1,7 @@
-﻿using Blackjack.Data;
+﻿using Blackjack.Core;
+using Blackjack.Data;
 using Blackjack.WPF.Commands;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace Blackjack.WPF.ViewModels
@@ -31,6 +33,8 @@ namespace Blackjack.WPF.ViewModels
         public bool IsGameView =>
             CurrentViewModel is GameViewModel;
 
+        public ObservableCollection<Player> TablePlayers { get; } = new();
+
         public ICommand NavigateHomeCommand { get; }
         public ICommand NavigateGameCommand { get; }
 
@@ -38,8 +42,8 @@ namespace Blackjack.WPF.ViewModels
         {
             _repository = new PlayerRepository(App.DbPath);
 
-            _homeVM = new HomeViewModel(_repository);
-            _gameVM = new GameViewModel(_repository);
+            _homeVM = new HomeViewModel(_repository, TablePlayers);
+            _gameVM = new GameViewModel(_repository, TablePlayers);
 
             NavigateHomeCommand = new RelayCommand(_ => NavigateHome());
             NavigateGameCommand = new RelayCommand(_ => NavigateGame());
