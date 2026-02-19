@@ -99,7 +99,8 @@
                   Grid.ColumnSpan="2"
                   Margin="20,5,10,10"
                   SelectionMode="Single"
-                  ItemsSource="{Binding TablePlayers}">
+                  ItemsSource="{Binding TablePlayers}"
+                  SelectedItem="{Binding SelectedTablePlayer}">
             
             <!-- Header Styling -->
             <ListView.Resources>
@@ -134,7 +135,8 @@
                 Content="Remove"
                 FontSize="12"
                 Background="FireBrick"
-                BorderBrush="FireBrick">
+                BorderBrush="FireBrick"
+                Command="{Binding RemoveTablePlayerCommand}">
         </Button>
 
     </Grid>
