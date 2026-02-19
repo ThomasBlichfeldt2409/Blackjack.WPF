@@ -288,7 +288,8 @@
                 Content="Add to Table"
                 FontSize="12"
                 Background="SteelBlue"
-                BorderBrush="SteelBlue">
+                BorderBrush="SteelBlue"
+                Command="{Binding AddToTableCommand}">
         </Button>
 
     </Grid>

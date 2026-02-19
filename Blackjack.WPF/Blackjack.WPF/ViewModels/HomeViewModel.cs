@@ -24,7 +24,8 @@ namespace Blackjack.WPF.ViewModels
             {
                 if (SetProperty(ref _selectedPlayer, value))
                 {
-                    (DeletePlayerCommand as RelayCommand)?.RaiseCanExecuteChanged(); 
+                    (DeletePlayerCommand as RelayCommand)?.RaiseCanExecuteChanged();
+                    (AddToTableCommand as RelayCommand)?.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -44,6 +45,7 @@ namespace Blackjack.WPF.ViewModels
         public ICommand RemoveTablePlayerCommand { get; }
         public ICommand OpenCreatePlayerCommand { get; }
         public ICommand DeletePlayerCommand { get; }
+        public ICommand AddToTableCommand { get; }
 
         public HomeViewModel(PlayerRepository repository, ObservableCollection<Player> tablePlayers)
         {
@@ -57,9 +59,15 @@ namespace Blackjack.WPF.ViewModels
             );
 
             OpenCreatePlayerCommand = new RelayCommand(_ => OpenCreatePlayer());
+
             DeletePlayerCommand = new RelayCommand(
                 _ => DeletePlayer(),
-                _ => SelectedPlayer != null
+                _ => CanDeletePlayer()
+            );
+
+            AddToTableCommand = new RelayCommand(
+                _ => AddToTable(),
+                _ => CanAddToTable()
             );
         }
 
@@ -69,6 +77,10 @@ namespace Blackjack.WPF.ViewModels
                 return;
 
             TablePlayers.Remove(SelectedTablePlayer);
+
+            // Re-evaluate so button disables
+            (AddToTableCommand as RelayCommand)?.RaiseCanExecuteChanged();
+            (DeletePlayerCommand as RelayCommand)?.RaiseCanExecuteChanged();
         }
 
         private void OpenCreatePlayer()
@@ -101,6 +113,40 @@ namespace Blackjack.WPF.ViewModels
             AllPlayers.Remove(SelectedPlayer);
 
             SelectedPlayer = null;
+        }
+
+        private bool CanDeletePlayer()
+        {
+            if (SelectedPlayer == null)
+                return false;
+
+            if (TablePlayers.Contains(SelectedPlayer))
+                return false;
+
+            return true;
+        }
+
+        private void AddToTable()
+        {
+            if (SelectedPlayer == null)
+                return;
+
+            TablePlayers.Add(SelectedPlayer);
+
+            // Re-evaluate so button disables
+            (AddToTableCommand as RelayCommand)?.RaiseCanExecuteChanged();
+            (DeletePlayerCommand as RelayCommand)?.RaiseCanExecuteChanged();
+        }
+
+        private bool CanAddToTable()
+        {
+            if (SelectedPlayer == null)
+                return false;
+
+            if (TablePlayers.Count >= 4)
+                return false;
+
+            return !TablePlayers.Any(p => p.Name == SelectedPlayer.Name);
         }
 
         public async Task LoadPlayersAsync()
