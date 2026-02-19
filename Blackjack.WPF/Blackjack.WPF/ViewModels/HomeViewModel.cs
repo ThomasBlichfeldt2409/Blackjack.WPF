@@ -55,7 +55,11 @@ namespace Blackjack.WPF.ViewModels
 
         private void OpenCreatePlayer()
         {
-            CreatePlayerViewModel vm = new CreatePlayerViewModel();
+            List<string> existingNames = AllPlayers
+                .Select(p => p.Name)
+                .ToList();
+
+            CreatePlayerViewModel vm = new CreatePlayerViewModel(existingNames, _repository);
 
             CreatePlayerWindow window = new CreatePlayerWindow
             {

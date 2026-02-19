@@ -9,12 +9,12 @@
     <Grid>
         <!-- Layout -->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"></ColumnDefinition>
-            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="6*"></ColumnDefinition>
+            <ColumnDefinition Width="6*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="2*"></ColumnDefinition>
-            <ColumnDefinition Width="2*"></ColumnDefinition>
-            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="6*"></ColumnDefinition>
+            <ColumnDefinition Width="6*"></ColumnDefinition>
+            <ColumnDefinition Width="6*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"></RowDefinition>
@@ -160,7 +160,7 @@
                 Grid.Row="0"
                 Grid.RowSpan="4"
                 Grid.ColumnSpan="3"
-                Margin="10,10,10,0"
+                Margin="10,10,20,0"
                 CornerRadius="8"
                 BorderThickness="2"
                 BorderBrush="Black">
@@ -185,7 +185,7 @@
         <ListView Grid.Column="3"
                   Grid.Row="1"
                   Grid.ColumnSpan="3"
-                  Margin="20,5,10,10"
+                  Margin="20,5,30,10"
                   SelectionMode="Single"
                   ItemsSource="{Binding AllPlayers}"
                   SelectedItem="{Binding SelectedPlayer}">
