@@ -269,7 +269,8 @@
                 Content="Delete"
                 FontSize="12"
                 Background="FireBrick"
-                BorderBrush="FireBrick">
+                BorderBrush="FireBrick"
+                Command="{Binding DeletePlayerCommand}">
         </Button>
 
         <Button Grid.Column="4"

@@ -11,10 +11,23 @@ namespace Blackjack.WPF.ViewModels
     {
         private readonly PlayerRepository _repository;
         private bool _isLoaded;
+        private Player? _selectedPlayer;
         private Player? _selectedTablePlayer;
 
         public ObservableCollection<Player> AllPlayers { get; } = new();
         public ObservableCollection<Player> TablePlayers { get; }
+
+        public Player? SelectedPlayer
+        {
+            get => _selectedPlayer;
+            set
+            {
+                if (SetProperty(ref _selectedPlayer, value))
+                {
+                    (DeletePlayerCommand as RelayCommand)?.RaiseCanExecuteChanged(); 
+                }
+            }
+        }
 
         public Player? SelectedTablePlayer
         {
@@ -30,6 +43,7 @@ namespace Blackjack.WPF.ViewModels
 
         public ICommand RemoveTablePlayerCommand { get; }
         public ICommand OpenCreatePlayerCommand { get; }
+        public ICommand DeletePlayerCommand { get; }
 
         public HomeViewModel(PlayerRepository repository, ObservableCollection<Player> tablePlayers)
         {
@@ -43,6 +57,10 @@ namespace Blackjack.WPF.ViewModels
             );
 
             OpenCreatePlayerCommand = new RelayCommand(_ => OpenCreatePlayer());
+            DeletePlayerCommand = new RelayCommand(
+                _ => DeletePlayer(),
+                _ => SelectedPlayer != null
+            );
         }
 
         private void RemoveTablePlayer()
@@ -71,6 +89,18 @@ namespace Blackjack.WPF.ViewModels
             {
                 AllPlayers.Add(vm.CreatedPlayer!);
             }
+        }
+
+        private async void DeletePlayer()
+        {
+            if (SelectedPlayer == null)
+                return;
+
+            await _repository.DeleteAsync(SelectedPlayer);
+
+            AllPlayers.Remove(SelectedPlayer);
+
+            SelectedPlayer = null;
         }
 
         public async Task LoadPlayersAsync()
