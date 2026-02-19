@@ -7,11 +7,136 @@
              mc:Ignorable="d">
     
     <Grid>
-        <TextBlock Text="HOME VIEW"
-                   FontSize="40"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center">
+        <!-- Layout -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <!-- Casino Message -->
+        <Border Grid.Column="0"
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.ColumnSpan="2"
+                Margin="10,10,0,0"
+                CornerRadius="8"
+                BorderThickness="2"
+                BorderBrush="Black">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#1C1C1C" Offset="0"/>
+                    <GradientStop Color="#3A3A3A" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+
+        <TextBlock Grid.Column="0"
+                   Grid.Row="0"
+                   Grid.ColumnSpan="2"
+                   Margin="20, 15, 0, 0"
+                   Text="Casino Message:"
+                   Foreground="WhiteSmoke"
+                   FontSize="16"
+                   FontWeight="Bold">
         </TextBlock>
+
+        <TextBox Grid.Column="0"
+                 Grid.Row="1"
+                 Grid.ColumnSpan="2"
+                 Margin="20,5,10,10"
+                 Background="WhiteSmoke"
+                 BorderThickness="1"
+                 BorderBrush="Black"
+                 VerticalContentAlignment="Top"
+                 TextWrapping="Wrap"
+                 IsReadOnly="true"
+                 Focusable="False"
+                 Cursor="Arrow">
+        </TextBox>
+
+        <!-- Table Overview -->
+        <Border Grid.Column="0"
+                Grid.Row="3"
+                Grid.RowSpan="3"
+                Grid.ColumnSpan="2"
+                Margin="10,10,0,0"
+                CornerRadius="8"
+                BorderThickness="2"
+                BorderBrush="Black">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#1C1C1C" Offset="0"/>
+                    <GradientStop Color="#3A3A3A" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+
+        <TextBlock Grid.Column="0"
+                   Grid.Row="3"
+                   Grid.ColumnSpan="2"
+                   Margin="20, 15, 0, 0"
+                   Text="Table Overview:"
+                   Foreground="WhiteSmoke"
+                   FontSize="16"
+                   FontWeight="Bold">
+        </TextBlock>
+
+        <ListView Grid.Column="0"
+                  Grid.Row="4"
+                  Grid.ColumnSpan="2"
+                  Margin="20,5,10,10"
+                  SelectionMode="Single"
+                  ItemsSource="{Binding TablePlayers}">
+            
+            <!-- Header Styling -->
+            <ListView.Resources>
+                <Style TargetType="GridViewColumnHeader"
+                       BasedOn="{StaticResource CasinoGridViewHeaderStyle}">
+                </Style>
+            </ListView.Resources>
+            
+            <!-- Item Styling -->
+            <ListView.ItemContainerStyle>
+                <StaticResource ResourceKey="CasinoListViewItemStyle"/>
+            </ListView.ItemContainerStyle>
+
+            <!-- Content -->
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name"
+                                    DisplayMemberBinding="{Binding Name}"
+                                    Width="135">
+                    </GridViewColumn>
+                    <GridViewColumn Header="Bank"
+                                    DisplayMemberBinding="{Binding Bank}"
+                                    Width="80">
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Button Grid.Column="0"
+                Grid.Row="5"
+                Margin="20,5,5,5"
+                Content="Remove"
+                FontSize="12"
+                Background="FireBrick"
+                BorderBrush="FireBrick">
+        </Button>
+
     </Grid>
     
 </UserControl>
