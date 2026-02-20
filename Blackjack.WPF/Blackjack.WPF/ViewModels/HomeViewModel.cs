@@ -26,6 +26,7 @@ namespace Blackjack.WPF.ViewModels
                 {
                     (DeletePlayerCommand as RelayCommand)?.RaiseCanExecuteChanged();
                     (AddToTableCommand as RelayCommand)?.RaiseCanExecuteChanged();
+                    (GetMoneyCommand as RelayCommand)?.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -46,6 +47,7 @@ namespace Blackjack.WPF.ViewModels
         public ICommand OpenCreatePlayerCommand { get; }
         public ICommand DeletePlayerCommand { get; }
         public ICommand AddToTableCommand { get; }
+        public ICommand GetMoneyCommand { get; }
 
         public HomeViewModel(PlayerRepository repository, ObservableCollection<Player> tablePlayers)
         {
@@ -69,6 +71,11 @@ namespace Blackjack.WPF.ViewModels
                 _ => AddToTable(),
                 _ => CanAddToTable()
             );
+
+            GetMoneyCommand = new RelayCommand(
+                _ => GetMoney(),
+                _ => CanGetMoney()
+            );
         }
 
         private void RemoveTablePlayer()
@@ -81,6 +88,7 @@ namespace Blackjack.WPF.ViewModels
             // Re-evaluate so button disables
             (AddToTableCommand as RelayCommand)?.RaiseCanExecuteChanged();
             (DeletePlayerCommand as RelayCommand)?.RaiseCanExecuteChanged();
+            (GetMoneyCommand as RelayCommand)?.RaiseCanExecuteChanged();
         }
 
         private void OpenCreatePlayer()
@@ -136,6 +144,7 @@ namespace Blackjack.WPF.ViewModels
             // Re-evaluate so button disables
             (AddToTableCommand as RelayCommand)?.RaiseCanExecuteChanged();
             (DeletePlayerCommand as RelayCommand)?.RaiseCanExecuteChanged();
+            (GetMoneyCommand as RelayCommand)?.RaiseCanExecuteChanged();
         }
 
         private bool CanAddToTable()
@@ -143,10 +152,38 @@ namespace Blackjack.WPF.ViewModels
             if (SelectedPlayer == null)
                 return false;
 
+            if (SelectedPlayer.Bank <= 0)
+                return false;
+
             if (TablePlayers.Count >= 4)
                 return false;
 
             return !TablePlayers.Any(p => p.Name == SelectedPlayer.Name);
+        }
+
+        private async void GetMoney()
+        {
+            if (SelectedPlayer == null)
+                return;
+
+            SelectedPlayer!.Bank += 1000;
+
+            await _repository.UpdateAsync(SelectedPlayer);
+
+            // Re-evaluate so button disables
+            (AddToTableCommand as RelayCommand)?.RaiseCanExecuteChanged();
+            (GetMoneyCommand as RelayCommand)?.RaiseCanExecuteChanged();
+        }
+
+        private bool CanGetMoney()
+        {
+            if (SelectedPlayer == null)
+                return false;
+
+            if (SelectedPlayer!.Bank > 0)
+                return false;
+
+            return true;
         }
 
         public async Task LoadPlayersAsync()

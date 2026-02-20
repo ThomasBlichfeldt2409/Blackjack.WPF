@@ -279,7 +279,8 @@
                 Content="Get Money"
                 FontSize="12"
                 Background="Goldenrod"
-                BorderBrush="Goldenrod">
+                BorderBrush="Goldenrod"
+                Command="{Binding GetMoneyCommand}">
         </Button>
 
         <Button Grid.Column="4"
