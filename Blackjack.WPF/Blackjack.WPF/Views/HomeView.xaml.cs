@@ -37,7 +37,10 @@ namespace Blackjack.WPF.Views
                 return;
 
             if (DataContext is HomeViewModel vm)
+            {
                 await vm.LoadPlayersAsync();
+                await vm.InitializeStateAsync();
+            }
         }
     }
 }

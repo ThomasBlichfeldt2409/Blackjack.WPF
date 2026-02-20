@@ -1,6 +1,7 @@
 ﻿using Blackjack.Core;
 using Blackjack.Data;
 using Blackjack.WPF.Commands;
+using Blackjack.WPF.Enums;
 using Blackjack.WPF.Views;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -11,8 +12,18 @@ namespace Blackjack.WPF.ViewModels
     {
         private readonly PlayerRepository _repository;
         private bool _isLoaded;
+        private bool _isTyping;
         private Player? _selectedPlayer;
         private Player? _selectedTablePlayer;
+        private HomeState _currentState;
+        private HomeState _lastTypedState;
+        private string _casinoMessage = string.Empty;
+
+        public string CasinoMessage
+        {
+            get => _casinoMessage;
+            set => SetProperty(ref _casinoMessage, value);
+        }
 
         public ObservableCollection<Player> AllPlayers { get; } = new();
         public ObservableCollection<Player> TablePlayers { get; }
@@ -78,7 +89,7 @@ namespace Blackjack.WPF.ViewModels
             );
         }
 
-        private void RemoveTablePlayer()
+        private async void RemoveTablePlayer()
         {
             if (SelectedTablePlayer == null)
                 return;
@@ -89,9 +100,11 @@ namespace Blackjack.WPF.ViewModels
             (AddToTableCommand as RelayCommand)?.RaiseCanExecuteChanged();
             (DeletePlayerCommand as RelayCommand)?.RaiseCanExecuteChanged();
             (GetMoneyCommand as RelayCommand)?.RaiseCanExecuteChanged();
+
+            await RefreshStateAsync();
         }
 
-        private void OpenCreatePlayer()
+        private async void OpenCreatePlayer()
         {
             List<string> existingNames = AllPlayers
                 .Select(p => p.Name)
@@ -108,6 +121,7 @@ namespace Blackjack.WPF.ViewModels
             if (window.ShowDialog() == true)
             {
                 AllPlayers.Add(vm.CreatedPlayer!);
+                await RefreshStateAsync();
             }
         }
 
@@ -121,6 +135,8 @@ namespace Blackjack.WPF.ViewModels
             AllPlayers.Remove(SelectedPlayer);
 
             SelectedPlayer = null;
+
+            await RefreshStateAsync();
         }
 
         private bool CanDeletePlayer()
@@ -134,7 +150,7 @@ namespace Blackjack.WPF.ViewModels
             return true;
         }
 
-        private void AddToTable()
+        private async void AddToTable()
         {
             if (SelectedPlayer == null)
                 return;
@@ -145,6 +161,8 @@ namespace Blackjack.WPF.ViewModels
             (AddToTableCommand as RelayCommand)?.RaiseCanExecuteChanged();
             (DeletePlayerCommand as RelayCommand)?.RaiseCanExecuteChanged();
             (GetMoneyCommand as RelayCommand)?.RaiseCanExecuteChanged();
+
+            await RefreshStateAsync();
         }
 
         private bool CanAddToTable()
@@ -173,6 +191,8 @@ namespace Blackjack.WPF.ViewModels
             // Re-evaluate so button disables
             (AddToTableCommand as RelayCommand)?.RaiseCanExecuteChanged();
             (GetMoneyCommand as RelayCommand)?.RaiseCanExecuteChanged();
+
+            await RefreshStateAsync();
         }
 
         private bool CanGetMoney()
@@ -184,6 +204,74 @@ namespace Blackjack.WPF.ViewModels
                 return false;
 
             return true;
+        }
+
+        private HomeState EvaluateState()
+        {
+            if (!AllPlayers.Any())
+                return HomeState.NoActivePlayers;
+
+            if (AllPlayers.All(p => p.Bank <= 0))
+                return HomeState.NoMoney;
+
+            if (!TablePlayers.Any())
+                return HomeState.NoTablePlayers;
+
+            return HomeState.GameReady;
+        }
+
+        private async Task RefreshStateAsync()
+        {
+            _currentState = EvaluateState();
+
+            if (_currentState == _lastTypedState || _isTyping == true)
+                return;
+
+            _isTyping = true;
+            _lastTypedState = _currentState;
+
+            await ShowStateMessageAsync(_currentState);
+
+            _isTyping = false;
+
+            await RefreshStateAsync();
+        }
+
+        private async Task ShowStateMessageAsync(HomeState state)
+        {
+            switch (state)
+            {
+                case HomeState.Startup:
+                    await TypeMessageAsync("Welcome to the Blackjack Lounge. Take a seat, gather your players, and let’s see if luck is on your side tonight.");
+                    break;
+
+                case HomeState.NoActivePlayers:
+                    await TypeMessageAsync("It looks a little empty in here… Create a player to step up to the table.");
+                    break;
+
+                case HomeState.NoMoney:
+                    await TypeMessageAsync("Your players are out of chips! Give them some funds before they can join the action.");
+                    break;
+
+                case HomeState.NoTablePlayers:
+                    await TypeMessageAsync("The table is waiting. Add at least one player to begin the game.");
+                    break;
+
+                case HomeState.GameReady:
+                    await TypeMessageAsync("At least one player has been added to the table. You may start the game.");
+                    break;
+            }
+        }
+
+        private async Task TypeMessageAsync(string message, int delay = 50)
+        {
+            CasinoMessage = string.Empty;
+
+            foreach (char c in message)
+            {
+                CasinoMessage += c;
+                await Task.Delay(delay);
+            }
         }
 
         public async Task LoadPlayersAsync()
@@ -200,6 +288,19 @@ namespace Blackjack.WPF.ViewModels
             }
 
             _isLoaded = true;
+        }
+
+        public async Task InitializeStateAsync()
+        {
+            _lastTypedState = HomeState.Startup;
+            _isTyping = true;
+
+            await ShowStateMessageAsync(HomeState.Startup);
+            await Task.Delay(3000);
+            _isTyping = false;
+
+            await RefreshStateAsync();
+
         }
     }
 }

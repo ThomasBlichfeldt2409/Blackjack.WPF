@@ -57,14 +57,17 @@
                  Grid.Row="1"
                  Grid.ColumnSpan="2"
                  Margin="20,5,10,10"
+                 FontSize="14"
+                 FontWeight="SemiBold"
                  Background="WhiteSmoke"
                  BorderThickness="1"
                  BorderBrush="Black"
                  VerticalContentAlignment="Top"
                  TextWrapping="Wrap"
-                 IsReadOnly="true"
+                 IsReadOnly="True"
                  Focusable="False"
-                 Cursor="Arrow">
+                 Cursor="Arrow"
+                 Text="{Binding CasinoMessage}">
         </TextBox>
 
         <!-- Table Overview -->
