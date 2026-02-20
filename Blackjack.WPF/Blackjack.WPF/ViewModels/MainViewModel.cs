@@ -46,7 +46,15 @@ namespace Blackjack.WPF.ViewModels
             _gameVM = new GameViewModel(_repository, TablePlayers);
 
             NavigateHomeCommand = new RelayCommand(_ => NavigateHome());
-            NavigateGameCommand = new RelayCommand(_ => NavigateGame());
+            NavigateGameCommand = new RelayCommand(
+                _ => NavigateGame(),
+                _ => TablePlayers.Count > 0
+            );
+
+            TablePlayers.CollectionChanged += (_, _) =>
+            {
+                (NavigateGameCommand as RelayCommand)?.RaiseCanExecuteChanged();
+            };
 
             NavigateHome();
         }
